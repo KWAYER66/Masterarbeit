@@ -1,4 +1,4 @@
-listNetze <- list.files("D:/Masterarbeit/ZinkFinger/Predictions", full.names=TRUE)
+listNetze <- list.files("/ZinkFinger/Predictions", full.names=TRUE)
 
 
 for (i in 1:length(listNetze)){
