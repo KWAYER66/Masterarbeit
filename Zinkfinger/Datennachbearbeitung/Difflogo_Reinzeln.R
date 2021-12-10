@@ -6,13 +6,13 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("DiffLogo")
 library(DiffLogo)
 
-listNetze <- list.files("D:/Masterarbeit/ZinkFinger/Predictions/", full.names=TRUE)
+listNetze <- list.files("/ZinkFinger/Predictions/", full.names=TRUE)
 listNetze
 listpwms1
 
 strsplit(listpwms1[j],"/")[1][[1]][5]
 for (i in 1:length(listNetze)){
-  if (grepl("prediction007_200_5", listNetze[i]) == TRUE){
+  if (grepl("auswertung", listNetze[i]) == FALSE){
   # 1. Fall ALLE
     listpwms1 <- list.files("D:/Masterarbeit/ZinkFinger/PWMSaufgefuellt", pattern="*.pwm", full.names=TRUE)
     listpwms2 <- list.files(listNetze[i] , pattern="*.pwm", full.names=TRUE)
@@ -29,6 +29,4 @@ for (i in 1:length(listNetze)){
     }
   }
 }
-sum(pwm1[,18])
-pwm1
-pwm2
+
