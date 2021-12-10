@@ -4,9 +4,7 @@ from numpy import genfromtxt
 from numpy import savetxt
 import fnmatch
 
-#Functionen - Name ist Programm
 
-# Diese Function -> ALTER STAND! <- Fülle PWMS anhand der Liste des Java Programms auf, sodass alle PWMS die gleiche Laenge haben
 def FuellePWMsAufGleicheLaenge():
 	OrdnerAllePWMS = os.listdir('/Users/kway/Desktop/Masterarbeit/PWMs_Homeodomain/Ausgabe_Aufgefuellte_PWMS/')
 	if os.path.exists('/Users/kway/Desktop/Masterarbeit/PWMs_Homeodomain/Vergleich_PWMS') == False:
