@@ -201,5 +201,5 @@ def MergeAlignmentsPwmZuordnungWeights():
 	np.save('D:\Masterarbeit\Daten\Input_NeuronalesNetz\AlignmentsPWMs_Zuordnung_Weights_neu3.npy', arr)
 
 
-#ErstelleListPwmGruppe()
+ErstelleListPwmGruppe()
 MergeAlignmentsPwmZuordnungWeights()
