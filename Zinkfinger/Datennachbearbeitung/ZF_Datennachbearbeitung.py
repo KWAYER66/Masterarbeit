@@ -15,31 +15,10 @@ from numpy.random import default_rng
 def CreateFolder(Path):
 	if os.path.exists(Path) == False:
 		os.makedirs(Path)
-def erzeugegegenteilliste2():
-	listspfad = os.listdir('D:\Masterarbeit\ZinkFinger\zufallsliste2')
-	inputdata = genfromtxt('D:\Masterarbeit\ZinkFinger\Input_NeuronalesNetzAlignment2.tsv', delimiter="\t")
-	for lists in listspfad:
-		if 'zufallsliste' in lists:
-			liste = np.load('D:\Masterarbeit\ZinkFinger\zufallsliste2\\'+lists)
-			liste = np.sort(liste)
-			gegenliste = []
-			zaehler = 0
-			for i in range(0,liste.shape[0]):
-				if zaehler == liste[i]:
-					zaehler = zaehler + 1
-				elif zaehler != liste[i]:
-					for j in range(0,liste[i]-zaehler):
-						gegenliste.append(zaehler)
-						zaehler = zaehler + 1
-					zaehler = zaehler +1
-			if zaehler < inputdata.shape[0]:
-				print('hi')
-			print(len(liste))
-			print(len(gegenliste))
-			np.save('D:\Masterarbeit\ZinkFinger\zufallsliste2\gegenneu'+lists,gegenliste)
+
 def erzeugegegenteilliste5():
 	listspfad = os.listdir('D:\Masterarbeit\ZinkFinger\zufallsliste5')
-	inputdata = genfromtxt('D:\Masterarbeit\ZinkFinger\Input_NeuronalesNetzAlignment5.tsv', delimiter="\t")
+	inputdata = genfromtxt('D:\Masterarbeit\ZinkFinger\Input_NeuronalesNetzAlignment4.tsv', delimiter="\t")
 	for lists in listspfad:
 		if 'zufallsliste' in lists:
 			liste = np.load('D:\Masterarbeit\ZinkFinger\zufallsliste5\\'+lists)
@@ -123,10 +102,6 @@ def KL_Div_ohne_Pwms_erzeugen():
 					tsvdateimitdivergencen.write(str(x2[0])+'\t')
 					tsvdateimitdivergencen.write(str(int(x2[1]*4))+'\t')
 					tsvdateimitdivergencen.write(str(-1)+'\n')
-				#x2 = kl_divergence_by_christian2(altpwm,prepwm2)
-
-				#tsvdateimitdivergencen.write(str(np.asarray(x2[0]))+'\t')
-				#tsvdateimitdivergencen.write(str(np.asarray(x2[1]))+'\n')
 def SplitPredictionsInSinglePwmData():
 	verzeichnispfad = 'D:\Masterarbeit\ZinkFinger\Predictions'
 	pwmsnamen = os.listdir('D:\Masterarbeit\ZinkFinger\PWMS')
@@ -150,30 +125,14 @@ def SplitPredictionsInSinglePwmData():
 				#Finde Länge der ursprunglichen PWM
 				altpwm = open('D:\Masterarbeit\ZinkFinger\PWMS\\'+file)
 				altpwmZ = altpwm.readlines()
-				#print(file)
-				#print(kl_divZ[zaehler].split('\t'))
-				#print(len(preds[i,:]))
-
+				
 				if int(kl_divZ[zaehler].split('\t')[2]) == -1:
 				#	print(preds[i,:])
 					predswrite = np.flip(preds[i,:])
 				else:
 					predswrite = preds[i,:]
 				start = int(kl_divZ[i].split('\t')[1])
-				"""
-				if int(kl_divZ[i].split('\t')[1])%4==0:
-					print(file)
-					start = int(kl_divZ[i].split('\t')[1])
-				elif int(kl_divZ[i].split('\t')[1])%4==1:
-					print('1')
-					start = int(kl_divZ[i].split('\t')[1]) - 1
-				elif int(kl_divZ[i].split('\t')[1])%4==2:
-					print('2')
-					start = int(kl_divZ[i].split('\t')[1]) - 2
-				else:
-					print('3')
-					start = int(kl_divZ[i].split('\t')[1]) - 3
-				"""
+
 				k = 0
 				if 0==0:
 					#for j in range(start, start+(int(len(altpwmZ)-1)*4)):
@@ -187,20 +146,7 @@ def SplitPredictionsInSinglePwmData():
 							ausgabe.write('\t')
 						k = k + 1
 					i = i +1
-				"""
-				else:
-					for j in range(start, int(kl_divZ[zaehler].split('\t')[1])+(int(len(altpwmZ)-1)*4)+2):
-						ausgabe.write(str(predswrite[j]))
-						if (k==3):
-							ausgabe.write('\n')
-						elif (k>3) & ((k-3)%4==0):
-							ausgabe.write('\n')
-						else:
-							ausgabe.write('\t')
-						k = k + 1
-					i = i +1
-				zaehler = zaehler + 1
-				"""
+
 def auswertunggegenliste():
 	pfadpredpwms = os.listdir('D:\Masterarbeit\ZinkFinger\Predictions')
 	for datei in pfadpredpwms:
@@ -214,58 +160,7 @@ def auswertunggegenliste():
 			for i in range(0, len(gegenliste)):
 				tsvgegenliste.write(str(gegenliste[i])+'\t')
 				tsvgegenliste.write(tsvdateimitdivergencenZ[gegenliste[i]])
-			"""
-			if (int(datei.split('_')[0].split('n')[1]) < 11):
-				print('Fall1')
-				tsvdateimitdivergencen = open('D:\Masterarbeit\ZinkFinger\Predictions'+'\\'+datei+'\kl_divergencen.tsv')
-				tsvdateimitdivergencenZ = tsvdateimitdivergencen.readlines()
-				tsvgegenliste = open('D:\Masterarbeit\ZinkFinger\Predictions'+'\\'+datei+'\kl_divergencenGegenlist.tsv', 'w')
-				tsvgegenliste.write('Index'+'\t'+'kl_div'+'\t'+'startpunkt'+'\t'+'normal_oder_reverse'+'\n')
-				gegenliste = np.load('D:\Masterarbeit\ZinkFinger\zufallsliste2\\gegenneuzufallsliste_neu'+str(datei.split('_')[2])+'.npy')
-				for i in range(0, len(gegenliste)):
-					tsvgegenliste.write(str(gegenliste[i])+'\t')
-					tsvgegenliste.write(tsvdateimitdivergencenZ[gegenliste[i]])
-			elif ((int(datei.split('_')[0].split('n')[1]) > 10) & (int(datei.split('_')[0].split('n')[1]) < 100)):
-				tsvdateimitdivergencen = open('D:\Masterarbeit\ZinkFinger\Predictions'+'\\'+datei+'\kl_divergencen.tsv')
-				tsvdateimitdivergencenZ = tsvdateimitdivergencen.readlines()
-				tsvgegenliste = open('D:\Masterarbeit\ZinkFinger\Predictions'+'\\'+datei+'\kl_divergencenGegenlist.tsv', 'w')
-				tsvgegenliste.write('Index'+'\t'+'kl_div'+'\t'+'startpunkt'+'\t'+'normal_oder_reverse'+'\n')
-				gegenliste = np.load('D:\Masterarbeit\ZinkFinger\zufallsliste3\\gegenneuzufallsliste_neu'+str(datei.split('_')[2])+'.npy')
-				for i in range(0, len(gegenliste)):
-					tsvgegenliste.write(str(gegenliste[i])+'\t')
-					tsvgegenliste.write(tsvdateimitdivergencenZ[gegenliste[i]])
-			else:
-				print('2er runde')
-				tsvdateimitdivergencen = open('D:\Masterarbeit\ZinkFinger\Predictions'+'\\'+datei+'\kl_divergencen.tsv')
-				tsvdateimitdivergencenZ = tsvdateimitdivergencen.readlines()
-				tsvgegenliste = open('D:\Masterarbeit\ZinkFinger\Predictions'+'\\'+datei+'\kl_divergencenGegenlist.tsv', 'w')
-				tsvgegenliste.write('Index'+'\t'+'kl_div'+'\t'+'startpunkt'+'\t'+'normal_oder_reverse'+'\n')
-				gegenliste = np.load('D:\Masterarbeit\ZinkFinger\zufallsliste2\\gegenneuzufallsliste_neu'+str(datei.split('_')[2])+'.npy')
-				for i in range(0, len(gegenliste)):
-					tsvgegenliste.write(str(gegenliste[i])+'\t')
-					tsvgegenliste.write(tsvdateimitdivergencenZ[gegenliste[i]])
-			"""
-			"""
-			elif ((int(datei.split('_')[0].split('n')[1]) > 100) & (int(datei.split('_')[0].split('n')[1]) < 111)):
-				tsvdateimitdivergencen = open('D:\Masterarbeit\ZinkFinger\Predictions'+'\\'+datei+'\kl_divergencen.tsv')
-				tsvdateimitdivergencenZ = tsvdateimitdivergencen.readlines()
-				tsvgegenliste = open('D:\Masterarbeit\ZinkFinger\Predictions'+'\\'+datei+'\kl_divergencenGegenlist.tsv', 'w')
-				tsvgegenliste.write('Index'+'\t'+'kl_div'+'\t'+'startpunkt'+'\t'+'normal_oder_reverse'+'\n')
-				gegenliste = np.load('D:\Masterarbeit\ZinkFinger\zufallsliste2\\gegenneuzufallsliste_neu'+str(datei.split('_')[2])+'.npy')
-				for i in range(0, len(gegenliste)):
-					tsvgegenliste.write(str(gegenliste[i])+'\t')
-					tsvgegenliste.write(tsvdateimitdivergencenZ[gegenliste[i]])
-			elif (int(datei.split('_')[0].split('n')[1]) > 110):
-				print('Fall4')
-				tsvdateimitdivergencen = open('D:\Masterarbeit\ZinkFinger\Predictions'+'\\'+datei+'\kl_divergencen.tsv')
-				tsvdateimitdivergencenZ = tsvdateimitdivergencen.readlines()
-				tsvgegenliste = open('D:\Masterarbeit\ZinkFinger\Predictions'+'\\'+datei+'\kl_divergencenGegenlist.tsv', 'w')
-				tsvgegenliste.write('Index'+'\t'+'kl_div'+'\t'+'startpunkt'+'\t'+'normal_oder_reverse'+'\n')
-				gegenliste = np.load('D:\Masterarbeit\ZinkFinger\zufallsliste3\\gegenneuzufallsliste_neu'+str(datei.split('_')[2])+'.npy')
-				for i in range(0, len(gegenliste)):
-					tsvgegenliste.write(str(gegenliste[i])+'\t')
-					tsvgegenliste.write(tsvdateimitdivergencenZ[gegenliste[i]])
-			"""
+				
 def Auswertung_KL_DIV():
 	pfadpredpwms = os.listdir('D:\Masterarbeit\ZinkFinger\Predictions')
 	for datei in pfadpredpwms:
@@ -315,8 +210,7 @@ def findbestneuronalnetz():
 
 
 
-#erzeugegegenteilliste2()
-#erzeugegegenteilliste3()
+erzeugegegenteilliste5()
 
 
 
